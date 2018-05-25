@@ -1,0 +1,30 @@
+{
+  "name": "lit-rpc-client-nodejs",
+  "version": "0.0.4",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mit-dci/lit-rpc-client-nodejs.git"
+  },
+  "keywords": [],
+  "author": "MIT Digital Currency Initiative",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mit-dci/lit-rpc-client-nodejs/issues"
+  },
+  "homepage": "https://github.com/mit-dci/lit-rpc-client-nodejs#readme",
+  "devDependencies": {
+    "@types/ws": "^5.1.1",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "ws": "^5.2.0"
+  }
+}
