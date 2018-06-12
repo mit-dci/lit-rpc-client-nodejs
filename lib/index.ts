@@ -1001,4 +1001,4 @@ class LitClient {
     }
 }
 
-export default LitClient;
+export { LitClient, litrpc as LitRPC };
