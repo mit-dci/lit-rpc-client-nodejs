@@ -463,8 +463,9 @@ export class GetContractArgs {
 	Idx? : number
 }
 
-export class AcceptOrDeclineContractArgs {
-    CIdx? : number
+export class ContractRespondArgs {
+	CIdx? : number
+	Accept? : boolean
 }
 
 export class SettleContractArgs {

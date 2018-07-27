@@ -545,7 +545,7 @@ class LitClient {
             let args = new litrpc.AddOracleArgs();
             args.Name = name;
             args.Key = pubKeyHex;
-            this.call<litrpc.AddOracleArgs,litrpc.AddOrImportOracleReply>("LitRPC.ImportOracle", args)
+            this.call<litrpc.AddOracleArgs,litrpc.AddOrImportOracleReply>("LitRPC.AddOracle", args)
             .then((reply) => {
                 reply = reply as litrpc.AddOrImportOracleReply;
                 if(reply.Oracle === undefined)  {
@@ -744,15 +744,17 @@ class LitClient {
         });
     }
 
-    /**
-     * Accepts a contract 
-     * @param contractIndex Index of the contract to accept
+     /**
+     * Responds to an offered contract 
+     * @param contractIndex Index of the contract to respond to
+     * @param accept True to accept, false to decline
      */
-    acceptContract(contractIndex : number) : Promise<void> {
+    respondContract(contractIndex : number, accept : boolean) : Promise<void> {
         return new Promise((resolve, reject) => {
-            let args = new litrpc.AcceptOrDeclineContractArgs();
+            let args = new litrpc.ContractRespondArgs();
             args.CIdx = contractIndex;
-            this.call<litrpc.AcceptOrDeclineContractArgs,litrpc.SuccessReply>("LitRPC.AcceptContract", args)
+            args.Accept = accept;
+            this.call<litrpc.ContractRespondArgs,litrpc.SuccessReply>("LitRPC.ContractRespond", args)
             .then((reply) => {
                 reply = reply as litrpc.SuccessReply;
                 if(reply.Success === undefined)  {
@@ -767,25 +769,19 @@ class LitClient {
     }
 
     /**
+     * Accepts a contract 
+     * @param contractIndex Index of the contract to accept
+     */
+    acceptContract(contractIndex : number) : Promise<void> {
+        return this.respondContract(contractIndex, true)
+    }
+
+    /**
      * Declines a contract
      * @param contractIndex Index of the contract to decline
      */
     declineContract(contractIndex : number) : Promise<void> {
-        return new Promise((resolve, reject) => {
-            let args = new litrpc.AcceptOrDeclineContractArgs();
-            args.CIdx = contractIndex;
-            this.call<litrpc.AcceptOrDeclineContractArgs,litrpc.SuccessReply>("LitRPC.DeclineContract", args)
-            .then((reply) => {
-                reply = reply as litrpc.SuccessReply;
-                if(reply.Success === undefined)  {
-                    reject(new Error("Unexpected reply from server"));
-                    return;
-                }
-                if(reply.Success) resolve();
-                else reject(new Error("Server returned success=false"));
-            })
-            .catch(reason => reject(reason));
-        });
+        return this.respondContract(contractIndex, false)
     }
 
     /**
@@ -876,7 +872,7 @@ class LitClient {
             args.CIdx = contractIndex;
             args.OurAmount = ourAmount;
             args.TheirAmount = theirAmount;
-            this.call<litrpc.SetContractFundingArgs,litrpc.SuccessReply>("LitRPC.SetContractCoinType", args)
+            this.call<litrpc.SetContractFundingArgs,litrpc.SuccessReply>("LitRPC.SetContractFunding", args)
             .then((reply) => {
                 reply = reply as litrpc.SuccessReply;
                 if(reply.Success === undefined)  {
