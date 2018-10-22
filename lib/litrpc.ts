@@ -3,7 +3,7 @@ export class NoArgs {
 }
 
 export class ListenArgs {
-    Port? : string
+    Port? : number
 }
 
 export class ListeningPortsReply {
@@ -114,7 +114,7 @@ export class ChannelInfo {
 	Capacity?       :   number
 	MyBalance?      :   number
 	Height?         :   number
-	StateNum?       :   number 
+	StateNum?       :   number
     PeerIdx?        :   number
     CIdx?           :   number
 	PeerID?         :   string
@@ -176,21 +176,21 @@ export class DlcOracle {
      * Index of the oracle for refencing in commands
      */
     Idx?  : number
-    
+
     /**
      * Public key of the oracle
      */
     A?  :  number[]
-    
+
     /**
      * Name of the oracle for display purposes
      */
-    Name? : string 
-    
+    Name? : string
+
     /**
      * Base URL of the oracle, if its REST based (optional)
      */
-	Url? : string   
+	Url? : string
 }
 
 export class ImportOracleArgs {
@@ -217,8 +217,8 @@ export class DlcContractDivision {
 }
 
 /**
- * DlcFwdOffer is an offer for a specific contract template: it is 
- * a bitcoin (or other coin) settled forward, which is symmetrically 
+ * DlcFwdOffer is an offer for a specific contract template: it is
+ * a bitcoin (or other coin) settled forward, which is symmetrically
  * funded
  */
 export class DlcFwdOffer {
@@ -293,7 +293,7 @@ export enum DlcContractStatus
 }
 
 /**
- * DlcContract is a struct containing all elements to work with a Discreet 
+ * DlcContract is a struct containing all elements to work with a Discreet
  * Log Contract. This struct is stored in the database of LIT
  */
 export class DlcContract {
@@ -307,7 +307,7 @@ export class DlcContract {
      */
 	TheirIdx?: number
 	/**
-     * Index of the peer we've offered the contract to or received the contract 
+     * Index of the peer we've offered the contract to or received the contract
      * from
      */
 	PeerIdx?: number
@@ -323,11 +323,11 @@ export class DlcContract {
      * Pub key of the R point (one-time signing key) used in the contract
      */
     OracleR? : number[]
-	/** 
+	/**
      * The time we expect the oracle to publish
      */
 	OracleTimestamp?: number
-	/** 
+	/**
      * The payout specification
      */
 	Division? : DlcContractDivision[]
@@ -369,17 +369,17 @@ export class DlcContract {
     OurPayoutPKH? : number[]
 	/**
      * Counterparty's Pubkeyhash to which the contract pays out (directly)
-     */  
+     */
     TheirPayoutPKH? : number[]
 	/**
      * Status of the contract
      */
 	Status? : DlcContractStatus
-	/** 
+	/**
      * Our outpoints used to fund the contract
      */
     OurFundingInputs? : DlcContractFundingInput[]
-    /** 
+    /**
      * Counter party's outpoints used to fund the contract
      */
     TheirFundingInputs? : DlcContractFundingInput[]

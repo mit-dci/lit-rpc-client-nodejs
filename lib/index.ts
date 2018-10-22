@@ -28,7 +28,7 @@ class LitClient {
     open() : Promise<void> {
         return new Promise((resolve, reject) => {
 
-            this.rpccon = new WebSocket('ws://' + this.host + ':' + this.port + '/ws', 'echo-protocol', { origin: "http://localhost/" })    
+            this.rpccon = new WebSocket('ws://' + this.host + ':' + this.port + '/ws', 'echo-protocol', { origin: "http://localhost/" })
             this.rpccon.onopen = () => {
                 resolve();
             }
@@ -48,8 +48,8 @@ class LitClient {
                 }
                 this.callbacks.delete(data.id);
             }
-            
-        });        
+
+        });
     }
 
     /**
@@ -75,7 +75,7 @@ class LitClient {
 
     /**
      * Instructs LIT to listen for incoming connections. By default, LIT will not
-     * listen. If LIT was already listening for incoming connections, this method 
+     * listen. If LIT was already listening for incoming connections, this method
      * will just resolve.
      * @param port The port number to listen on (default: 2448)
      * @returns True on success, false on failure
@@ -83,9 +83,9 @@ class LitClient {
     listen(port : number = 2448) : Promise<void> {
         return new Promise((resolve, reject) => {
             let args = new litrpc.ListenArgs();
-            args.Port = ":" + port.toString();
+            args.Port = port;
             this.call<litrpc.ListenArgs,litrpc.ListeningPortsReply>("LitRPC.Listen", args)
-            .catch((reason) => { 
+            .catch((reason) => {
                 if(reason.indexOf('bind: address already in use') == -1) {
                     reject(reason)
                 }
@@ -103,13 +103,13 @@ class LitClient {
      */
     isListening() : Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            if(this.listeningStatus !== ListeningStatus.Unknown) { 
+            if(this.listeningStatus !== ListeningStatus.Unknown) {
                 resolve(this.listeningStatus === ListeningStatus.Listening);
                 return;
             }
 
             this.call<litrpc.NoArgs,litrpc.ListeningPortsReply>("LitRPC.GetListeningPorts", {})
-            .catch((reason) => { 
+            .catch((reason) => {
                 reject(reason)
             })
             .then((reply) => {
@@ -127,7 +127,7 @@ class LitClient {
     getLNAddress() : Promise<string> {
         return new Promise<string>((resolve, reject) => {
             this.call<litrpc.NoArgs,litrpc.ListeningPortsReply>("LitRPC.GetListeningPorts", {})
-            .catch((reason) => { 
+            .catch((reason) => {
                 reject(reason)
             })
             .then((reply) => {
@@ -163,10 +163,10 @@ class LitClient {
                 }
                 resolve();
             })
-            .catch((reason) => { 
+            .catch((reason) => {
                 reject(reason)
             })
-            
+
         });
     }
 
@@ -368,7 +368,7 @@ class LitClient {
 
     /**
      * Returns a list of channels (both active and closed)
-     * @returns Array of @see litrpc.ChannelInfo objects containing the known channels 
+     * @returns Array of @see litrpc.ChannelInfo objects containing the known channels
      */
     listChannels() : Promise<litrpc.ChannelInfo[]> {
         return new Promise<litrpc.ChannelInfo[]> ((resolve, reject) => {
@@ -386,7 +386,7 @@ class LitClient {
     }
 
     /**
-     * Creates a new payment channel by funding a multi-sig output and exchanging the initial state 
+     * Creates a new payment channel by funding a multi-sig output and exchanging the initial state
      * between peers. After the channel exists, funds can freely be exchanged between peers without
      * using the blockchain.
      * @param peerIndex The peer to create the channel with
@@ -467,7 +467,7 @@ class LitClient {
                 resolve(reply.StateIndex);
             })
             .catch(reason => reject(reason));
-        });      
+        });
     }
 
     /**
@@ -532,8 +532,8 @@ class LitClient {
                 resolve(reply.Oracle);
             })
             .catch(reason => reject(reason));
-        });    
-    } 
+        });
+    }
 
     /**
      * Adds a new oracle by specifying its public key
@@ -555,8 +555,8 @@ class LitClient {
                 resolve(reply.Oracle);
             })
             .catch(reason => reject(reason));
-        });    
-    } 
+        });
+    }
 
     /**
      * Returns a list of known oracles
@@ -573,7 +573,7 @@ class LitClient {
                 resolve(reply.Oracles);
             })
             .catch(reason => reject(reason));
-        });  
+        });
     }
 
     /**
@@ -595,7 +595,7 @@ class LitClient {
                 resolve(reply.Offer);
             })
             .catch(reason => reject(reason));
-        });  
+        });
     }
 
     /**
@@ -613,7 +613,7 @@ class LitClient {
                 resolve(reply.Offers);
             })
             .catch(reason => reject(reason));
-        });  
+        });
     }
 
     /**
@@ -635,7 +635,7 @@ class LitClient {
                 else reject(new Error("Server returned success=false"));
             })
             .catch(reason => reject(reason));
-        }); 
+        });
     }
 
     /**
@@ -657,7 +657,7 @@ class LitClient {
                 else reject(new Error("Server returned success=false"));
             })
             .catch(reason => reject(reason));
-        }); 
+        });
     }
 
     /**
@@ -745,7 +745,7 @@ class LitClient {
     }
 
      /**
-     * Responds to an offered contract 
+     * Responds to an offered contract
      * @param contractIndex Index of the contract to respond to
      * @param accept True to accept, false to decline
      */
@@ -769,7 +769,7 @@ class LitClient {
     }
 
     /**
-     * Accepts a contract 
+     * Accepts a contract
      * @param contractIndex Index of the contract to accept
      */
     acceptContract(contractIndex : number) : Promise<void> {
@@ -788,7 +788,7 @@ class LitClient {
      * Settles the contract and claims the funds back to the wallet
      * @param contractIndex Index of the contract to settle
      * @param oracleValue Oracle value to settle the contract on
-     * @param oracleSignature Signature from the oracle for the value 
+     * @param oracleSignature Signature from the oracle for the value
      */
     settleContract(contractIndex : number, oracleValue: number, oracleSignature : number[]) : Promise<litrpc.SettleContractReply> {
         return new Promise((resolve, reject) => {
@@ -938,7 +938,7 @@ class LitClient {
     /**
      * Configures a contract to use a specific oracle. You need to import the oracle first.
      * @param contractIndex The index of the contract to set the oracle for
-     * @param oracleIndex The index of the oracle to use 
+     * @param oracleIndex The index of the oracle to use
      */
     setContractOracle(contractIndex : number, oracleIndex : number) : Promise<void> {
         return new Promise((resolve, reject) => {
@@ -988,7 +988,7 @@ class LitClient {
             }
             this.callbacks.set(id, {resolve:resolve,reject:reject});
             this.rpccon.send(JSON.stringify({'method': method, 'params': [request], 'id': id}), (err) => {
-                if(err !== undefined) { 
+                if(err !== undefined) {
                     reject(err);
                     this.callbacks.delete(id);
                 }
